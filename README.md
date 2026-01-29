@@ -1,0 +1,2 @@
+# actions-sample
+GithubActionsのサンプル
