@@ -90,6 +90,8 @@ jobs:
 
       - name: Start backend server
         working-directory: apps/backend
+        env:
+          DB_HOST: localhost
         run: |
           ./gradlew bootRun &
           echo $! > backend.pid
