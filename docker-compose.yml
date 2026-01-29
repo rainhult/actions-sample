@@ -1,0 +1,23 @@
+volumes:
+  gradle-cache:
+  vscode-extensions:
+  vscode-extensions-front:
+  cline-cache:
+  mcp-server:
+  gemini-cache:
+
+services:
+  apps:
+    container_name: actions-sample-app
+    build:
+      context: ./apps/.devcontainer
+    volumes:
+      - .:/workspaces:cached
+      - gradle-cache:/root/.gradle
+      - vscode-extensions-front:/root/.vscode-server/extensions
+      - cline-cache:/root/.vscode-server/data/User/globalStorage/saoudrizwan.claude-dev
+      - mcp-server:/root/Documents/Cline/MCP
+      - gemini-cache:/root/.gemini
+    command: sleep infinity
+    ports:
+      - 8080:8080

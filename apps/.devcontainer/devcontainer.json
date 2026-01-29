@@ -1,0 +1,21 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "actions-sample-app",
+	"dockerComposeFile": "../../docker-compose.yml",
+	"service": "apps",
+	"workspaceFolder": "/workspaces/apps",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"github.copilot",
+				"dbaeumer.vscode-eslint",
+				"saoudrizwan.claude-dev",
+				"eamodio.gitlens",
+				"vscjava.vscode-java-pack",
+				"vmware.vscode-boot-dev-pack"
+			]
+		}
+	},
+	"remoteUser": "root"
+}
