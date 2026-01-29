@@ -32,11 +32,30 @@ RUN apt-get update && \
 # GeminiCLIのインストール (Node.js版)
 RUN npm install -g @google/gemini-cli
 
-# playwrightに必要な依存関係のインストール
-RUN npx playwright install-deps
+# Playwrightに必要なシステム依存関係のインストール
+RUN apt-get update && apt-get install -y \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libdbus-1-3 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Playwrightのブラウザをインストール
-RUN npx playwright install chromium firefox webkit
-
-# Chromeブラウザのインストール
-RUN npx playwright install chrome
+# e2eのpackage.jsonをコピーしてPlaywrightをインストール
+COPY e2e/package.json /tmp/e2e-package.json
+RUN cd /tmp && \
+    npm install --prefix /tmp/e2e @playwright/test@^1.58.0 && \
+    /tmp/e2e/node_modules/.bin/playwright install chromium && \
+    rm -rf /tmp/e2e-package.json /tmp/e2e
