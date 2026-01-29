@@ -5,6 +5,7 @@ volumes:
   cline-cache:
   mcp-server:
   gemini-cache:
+  postgres-data:
 
 services:
   apps:
@@ -21,3 +22,19 @@ services:
     command: sleep infinity
     ports:
       - 8080:8080
+  db:
+    container_name: actions-sample-postgresqldb
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in app container
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+    ports:
+        - 5432:5432
+  
