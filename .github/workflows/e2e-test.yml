@@ -65,6 +65,21 @@ jobs:
         working-directory: apps/frontend
         run: npm run copy
 
+      - name: Start PostgreSQL
+        run: |
+          docker run -d \
+            --name actions-sample-postgresqldb \
+            -e POSTGRES_USER=postgres \
+            -e POSTGRES_PASSWORD=postgres \
+            -e POSTGRES_DB=postgres \
+            -p 5432:5432 \
+            postgres:latest
+          sleep 5
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          timeout 30 bash -c 'until docker exec postgres-test pg_isready -U postgres; do sleep 2; done'
+
       - name: Make gradlew executable
         working-directory: apps/backend
         run: chmod +x gradlew
@@ -94,6 +109,12 @@ jobs:
           if [ -f apps/backend/backend.pid ]; then
             kill $(cat apps/backend/backend.pid) || true
           fi
+
+      - name: Stop PostgreSQL
+        if: always()
+        run: |
+          docker stop postgres-test || true
+          docker rm postgres-test || true
 
       - name: Upload Playwright report
         if: always()
